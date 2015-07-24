@@ -1,4 +1,7 @@
 #:kivy 1.9
+#:include ci_screen/templates.kv
 
-Button:
-    text: 'Hello world'
+ScreenManager:
+    id: screen_manager
+    JobsScreen:
+        id: jobs_screen

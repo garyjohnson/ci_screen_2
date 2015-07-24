@@ -1,8 +1,10 @@
 kvaut==0.0.9
+PyPubSub
 shovel
 behave
 bottle
 requests
+xmltodict
 pytz
 tzlocal
 datetime

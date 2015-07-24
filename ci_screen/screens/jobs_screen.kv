@@ -1,0 +1,13 @@
+#:import JobsScreen ci_screen.screens.jobs_screen.JobsScreen
+#:import Color kivy.graphics.Color
+
+<JobsScreen>:
+    canvas:
+        Color:
+            rgba: 1, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    ListView:
+        id: jobs_list
+        size: self.size

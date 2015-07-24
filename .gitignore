@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+.venv
+.tox
 reports-py*
 __pycache__/
 *.py[cod]
