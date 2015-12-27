@@ -12,6 +12,7 @@ def set_succeeded(*args):
 class Project(EventDispatcher):
 
     name = StringProperty('')
+    ci_server = StringProperty('')
     activity = StringProperty('Sleeping')
     last_build_status = StringProperty('Unknown')
     last_build_time = StringProperty('2015-07-01T18:04:22Z')
@@ -19,6 +20,7 @@ class Project(EventDispatcher):
 
     def __init__(self, **kwargs):
         self.name = kwargs.get('name', '')
+        self.ci_server = kwargs.get('ci_server', '')
         self.activity = kwargs.get('activity', 'Sleeping')
         self.last_build_status = kwargs.get('last_build_status', 'Unknown')
         self.last_build_time = kwargs.get('last_build_time', '2015-07-01T18:04:22Z')

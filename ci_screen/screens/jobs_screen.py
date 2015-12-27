@@ -74,6 +74,7 @@ class JobsScreen(Screen):
                     project_args['activity'] = response_project.get('@activity')
                     project_args['last_build_status'] = response_project.get('@lastBuildStatus')
                     project_args['last_build_time'] = response_project.get('@lastBuildTime')
+                    project_args['ci_server'] = ci_server
 
                     project = Project(**project_args)
                     projects.append(project)
