@@ -1,13 +1,20 @@
 #:import JobsScreen ci_screen.screens.jobs_screen.JobsScreen
 #:import Color kivy.graphics.Color
+#:import SimpleListAdapter kivy.adapters.simplelistadapter.SimpleListAdapter
+
 
 <JobsScreen>:
     canvas:
         Color:
-            rgba: 1, 0, 0, 1
+            rgba: 0, 0, 0, 1
         Rectangle:
             pos: self.pos
             size: self.size
     ListView:
         id: jobs_list
-        size: self.size
+        size: root.size
+        adapter: 
+            SimpleListAdapter(
+            data=root.failed_projects + root.projects,
+            cls=JobItem,
+            args_converter=JobItem.args_converter)

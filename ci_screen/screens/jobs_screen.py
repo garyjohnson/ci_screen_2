@@ -1,30 +1,29 @@
+import xmltodict
+import collections
+from pydispatch import dispatcher
 from kivy.uix.screenmanager import Screen
 from kivy.uix.label import Label
 from kivy.adapters.simplelistadapter import SimpleListAdapter
-import pubsub.pub as pub
-import xmltodict
-import collections
+from kivy.properties import ListProperty
 
 from ci_screen.models.project import Project
 
 
 class JobsScreen(Screen):
 
+    projects = ListProperty([])
+    failed_projects = ListProperty([])
+
     def __init__(self, **kwargs):
         super(JobsScreen, self).__init__(**kwargs)
-        self.projects = []
-        self.failed_projects = []
-        pub.subscribe(self.on_status_update, "CI_UPDATE")
+        dispatcher.connect(self._on_status_update, "CI_UPDATE", sender=dispatcher.Any)
 
-    def on_status_update(self, responses, errors):
+    def _on_status_update(self, responses, errors):
         bad_ci_servers = errors.keys()
         new_projects = [p for p in self.get_projects_from_responses(responses) if p.last_build_status != 'Unknown']
 
-        self._synchronize_projects(self.projects, [p for p in new_projects if not p.is_failed()], bad_ci_servers)
-        self._synchronize_projects(self.failed_projects, [p for p in new_projects if p.is_failed()], bad_ci_servers)
-
-        project_names = [p.name for p in self.projects+self.failed_projects]
-        self.ids.jobs_list.adapter = SimpleListAdapter(data=project_names, cls=Label)
+        self._synchronize_projects(self.projects, [p for p in new_projects if p.succeeded], bad_ci_servers)
+        self._synchronize_projects(self.failed_projects, [p for p in new_projects if not p.succeeded], bad_ci_servers)
 
     def _synchronize_projects(self, projects_model, new_projects, bad_ci_servers):
         new_project_names = [p.name for p in new_projects]
@@ -40,7 +39,6 @@ class JobsScreen(Screen):
             self.update(updated_project)
 
         self.sort_by_last_build_time()
-
 
     def sort_by_last_build_time(self):
         unsorted_projects = list(self.projects)
@@ -71,11 +69,12 @@ class JobsScreen(Screen):
             statuses = xmltodict.parse(response.text, dict_constructor=lambda *args, **kwargs: collections.defaultdict(list, *args, **kwargs))
             for response_projects in statuses['Projects']:
                 for response_project in response_projects['Project']:
-                    name = response_project.get('@name')
-                    activity = response_project.get('@activity')
-                    last_build_status = response_project.get('@lastBuildStatus')
-                    last_build_time = response_project.get('@lastBuildTime')
+                    project_args = {}
+                    project_args['name'] = response_project.get('@name')
+                    project_args['activity'] = response_project.get('@activity')
+                    project_args['last_build_status'] = response_project.get('@lastBuildStatus')
+                    project_args['last_build_time'] = response_project.get('@lastBuildTime')
 
-                    project = Project(name, activity, last_build_status, last_build_time, ci_server)
+                    project = Project(**project_args)
                     projects.append(project)
         return projects

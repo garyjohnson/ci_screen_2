@@ -1,5 +1,5 @@
-kvaut==0.0.9
-PyPubSub
+kvaut==0.0.16
+nose
 shovel
 behave
 bottle
@@ -9,3 +9,4 @@ pytz
 tzlocal
 datetime
 python-dateutil
+PyDispatcher
