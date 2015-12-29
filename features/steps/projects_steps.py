@@ -17,7 +17,7 @@ def i_do_not_see_projects(context, projects):
 
 @step(u'"(?P<above>[^"]*)" is above "(?P<below>[^"]*)"')
 def is_above(context, above, below):
-    helpers.assert_is_above(above, below)
+    kvaut.client.assert_is_above(above, below)
 
 @step(u'I see successful projects "(?P<project>[^"]*)"')
 def i_see_successful_projects(context, project):

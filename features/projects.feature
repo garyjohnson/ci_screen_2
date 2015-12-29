@@ -22,7 +22,6 @@ Feature: Projects
     And I do not see failed projects "My Project"
     And I do not see successful projects "My Other Project"
 
-  @later
   Scenario: Order errors first
     Given I have a CI server with projects:
       | name              | status    |
@@ -33,7 +32,6 @@ Feature: Projects
     Then "My Other Project" is above "My Project"
     And "My Other Other Project" is above "My Project"
 
-  @later
   Scenario: Show Projects from Multiple CI Servers
     Given I have a CI server with projects:
       | name              |
