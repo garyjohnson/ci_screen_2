@@ -29,8 +29,8 @@ def assert_is_above(above, below):
     above_y = 0
     below_y = 0
     for retry in range(10):
-        above_element = kvaut.client.find_element(above, None)
-        below_element = kvaut.client.find_element(below, None)
+        above_element = kvaut.client.find_element(above)
+        below_element = kvaut.client.find_element(below)
 
         above_y = above_element.get('global_position', {}).get('y', 0)
         below_y = below_element.get('global_position', {}).get('y', 0)
